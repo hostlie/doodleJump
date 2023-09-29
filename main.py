@@ -1,8 +1,10 @@
 import pyxel
-from platforms import Platform
 from managePlatforms import ManagePlatforms
 import random
 import numpy as np
+import pyxel
+from player import Player
+
 
 screenSize = (456, 576)
 
@@ -13,10 +15,9 @@ pyxel.init(screenSize[0], screenSize[1], title="Doodle Jump")
 class Game:
     def __init__(self):
         self.platformFall = []
-        self.movePlatform = False
         self.is_generatedMap = False
-        self.platforms = ManagePlatforms(screenSize)
-
+        self.platforms = ManagePlatforms(screenSize, "platforms.pyxres")
+        self.p = Player()
 
         pyxel.run(self.update, self.draw)
 
@@ -25,24 +26,25 @@ class Game:
 
 
     def update(self):
+
+        self.p.moves()
+
         if not self.is_generatedMap:
-            self.platforms.generatePlatforms(50)
-            #print(len(self.platformGenerated), self.platformGenerated)
+            self.platforms.generatePlatforms(100)
+            #print(len(self.platforms.platformGenerated))
             self.is_generatedMap = True
         if pyxel.btnr(pyxel.KEY_SPACE):
             #self.platformGenerated[2].fall = True
-            self.platforms.up  = True
+            self.platforms.up = True
 
             #platform.breakPlatorm(1)
 
         if self.platforms.up and self.platforms.platformGenerated.size > 0:
             # print(fonctionVitesse)
+            self.platforms.vitesse = ((self.platforms.heightJump - 10) / self.platforms.jumpEtatY) * 12
             for plt in self.platforms.platformGenerated:
                 if 1 <= self.platforms.jumpEtatY < self.platforms.heightJump:
-                    plt.vitesse = ((self.platforms.heightJump - 10) / self.platforms.jumpEtatY) * 12
-                    plt.position[1] += plt.vitesse
-
-                print(plt.vitesse, self.platforms.jumpEtatY)
+                    plt.position[1] += self.platforms.vitesse
 
             self.platforms.jumpEtatY += 1
 
@@ -55,10 +57,14 @@ class Game:
                 self.platforms.jumpEtatY = 1
 
         if self.platforms.down and self.platforms.platformGenerated.size > 0:
+            self.platforms.vitesse += 9.81
             for plt in self.platforms.platformGenerated:
                 if 1 <= self.platforms.jumpEtatY < self.platforms.heightJump:
-                    self.vitesse = ((self.platforms.heightJump - 10) / self.platforms.jumpEtatY) * 12
-                    plt.position[1] += plt.vitesse
+                    plt.position[1] -= self.platforms.vitesse
+
+        if self.platforms.platformGenerated.size > 0:
+            if self.platforms.platformGenerated[0].position[1] < 0:
+                print("End")
 
         #print(len(self.platformGenerated))
 
@@ -97,5 +103,7 @@ class Game:
             else:
                 pyxel.blt(x=plt.position[0], y=plt.position[1], img=plt.type, u=0, v=0, w=64, h=32, colkey=0)
                 pyxel.blt(x=plt.position[0] + 64, y=plt.position[1], img=plt.type, u=0, v=0, w=-16, h=32, colkey=0)
+
+        self.p.draw()
 
 Game()

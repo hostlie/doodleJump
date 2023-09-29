@@ -5,7 +5,7 @@ from platforms import Platform
 
 
 class ManagePlatforms:
-    def __init__(self, screenSize):
+    def __init__(self, screenSize, imagesFilename):
         self.up = False
         self.down = False
         self.platformGenerated = np.array([])
@@ -14,6 +14,10 @@ class ManagePlatforms:
         self.jumpEtatY = 1
         self.heightJump = 20 # / 30 en seconde exemple 60 / 30 = 2 secondes
         self.vitesse = 0
+        pyxel.load(imagesFilename)
+
+    def animtionBreakPlatform(self, i):
+        pass #self.platformGenerated[i].
 
 
     def generatePlatforms(self, nb_plt):
@@ -34,4 +38,4 @@ class ManagePlatforms:
             y_gen = y_total - random.randint(40, 60)
             y_total = y_gen
             #print("append")
-            self.platformGenerated = np.append(self.platformGenerated, [Platform(0, "platforms.pyxres", self.screenSize, x_gen, y_gen)])
+            self.platformGenerated = np.append(self.platformGenerated, [Platform(random.choice([1, 2, 4, 6]) % 2, self.screenSize, x_gen, y_gen)])
