@@ -2,19 +2,17 @@ import pyxel
 import random
 
 class Platform:
-    def __init__(self, typeP, screenSize, x, y):
+    def __init__(self, platformType, screenSize, x, y):
         '''
         :param typeP: Type de platforme (0 : normale, 1 : cassante, 2 : tombante, 3 : montante/descendante)
-                    pyxel.blt(x=self.position[0], y=self.position[1], img=self.type, u=0, v=0, w=64, h=32, colkey=0)
-            pyxel.blt(x=self.position[0] + 64, y=self.position[1], img=self.type, u=0, v=0, w=-16, h=32, colkey=0)
         '''
 
         self.screenSize = screenSize
         self.position = [x, y]
-        self.type = typeP
+        self.platformType = platformType
         self.anim = False
-        self.animIndice = 0
         self.fall = False
+        self.vitesse = 2
 
 
     def fallPlatform(self, speed=3):
@@ -22,20 +20,16 @@ class Platform:
 
     def breakPlatorm(self, i):
         # Animation de la platforme se cassant
-        self.animIndice = i
-        self.anim = True
-        """for imgInt in range(2):
-            pyxel.blt(x=self.platformGenerated[i][1], y=self.platformGenerated[i][2], img=imgInt, u=0, v=0, w=64, h=32, colkey=0)
-            pyxel.blt(x=self.platformGenerated[i][1] + 64, y=self.platformGenerated[i][2], img=imgInt, u=0, v=0, w=-16, h=32, colkey=0)"""
+        pass
 
 
-    # =====================================================
-    # == DRAW
-    # =====================================================
+    def draw(self):
+        if self.anim:
+            pyxel.blt(x=self.position[0], y=self.position[1] + self.vitesse * 8, img=0, u=0, v=32 + self.platformType, w=64, h=32, colkey=0)
 
+            pyxel.blt(x=self.position[0] + 32 + self.vitesse, y=self.position[1] + self.vitesse * 8, img=0, u=0, v=64 + self.platformType, w=58, h=32, colkey=0)
+            pyxel.blt(x=self.position[0] + 64 + self.vitesse, y=self.position[1] + self.vitesse * 8, img=0, u=0, v=32 + self.platformType, w=-16, h=32, colkey=0)
 
-
-
-#Platforms(1, "platforms.pyxres")
-
-
+        else:
+            pyxel.blt(x=self.position[0], y=self.position[1], img=0, u=0, v=self.platformType, w=64, h=32, colkey=0)
+            pyxel.blt(x=self.position[0] + 64, y=self.position[1], img=0, u=0, v=self.platformType, w=-16, h=32, colkey=0)
