@@ -6,4 +6,4 @@ Dans le jeu :
 - Score (hauteur)
 
 Répartition du développement du jeu :
-- Axel : Platformes, Items
+- Axel : Platformes, Items, Saut

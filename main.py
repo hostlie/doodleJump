@@ -1,3 +1,5 @@
+import math
+
 import pyxel
 from managePlatforms import ManagePlatforms
 from manageRessorts import ManageRessorts
@@ -50,42 +52,10 @@ class Game:
 
 
         self.platforms.mustJump(self.player)
-
-        if self.platforms.up and len(self.platforms.platformGenerated) > 0:
-            # print(fonctionVitesse)
-            self.platforms.vitesse += self.platforms.heightJump / self.platforms.jumpEtatY - self.platforms.vitesse
-            print(self.platforms.vitesse)
-            for plt, item in self.platforms.platformGenerated:
-                if 1 <= self.platforms.jumpEtatY < self.platforms.heightJump:
-                    plt.position[1] += self.platforms.vitesse
-
-                if plt.position[1] - 52 > screenSize[1]:
-                    self.platforms.platformGenerated.remove([plt, item])
-                    #self.platforms.platformGenerated = [plt, item for plt, item in self.platforms.platformGenerated]
-
-
-
-            self.platforms.jumpEtatY += 1
-
-
-
-            """if len(self.platforms.platformGenerated) < 30:
-                self.platforms.generatePlatforms(100)"""
-
-            if self.platforms.jumpEtatY > self.platforms.heightJump:
-                self.platforms.up = False
-                self.platforms.down = True
-                self.platforms.jumpEtatY = 1
-                self.platforms.vitesse = 1
-
-        if self.platforms.down and len(self.platforms.platformGenerated) > 0:
-            self.platforms.vitesse += 0.3
-            for plt in self.platforms.platformGenerated:
-                if 1 <= self.platforms.jumpEtatY < self.platforms.heightJump:
-                    plt[0].position[1] -= self.platforms.vitesse
+        self.platforms.update()
 
         if self.platforms.platformGenerated[0][0].position[1] < 0:
-            print("End")
+            pass#print("End")
 
 
 
