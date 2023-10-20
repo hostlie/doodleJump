@@ -1,13 +1,10 @@
 import math
-
-import pyxel
 from managePlatforms import ManagePlatforms
 from manageRessorts import ManageRessorts
-import random
-import numpy as np
-import pyxel
+from manageJetpacks import ManageJetpacks
 from player import Player
-
+import random
+import pyxel
 
 
 screenSize = (456, 576)
@@ -23,6 +20,7 @@ class Game:
         self.is_generatedMap = False
         self.platforms = ManagePlatforms(screenSize)
         self.ressorts = ManageRessorts()
+        self.jetpacks = ManageJetpacks()
         self.player = Player(screenSize)
 
         pyxel.run(self.update, self.draw)
@@ -39,6 +37,9 @@ class Game:
             self.platforms.generatePlatforms(100)
             self.ressorts.generateRessorts(self.platforms.platformGenerated)
             self.platforms.putItem(self.ressorts.ressortsGenerated)
+            self.jetpacks.generateJetpacks(self.platforms.platformGenerated)
+            print(self.jetpacks.jetpacksGenerated)
+
 
 
             print(self.platforms.platformGenerated)

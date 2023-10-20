@@ -27,6 +27,7 @@ class ManagePlatforms:
 
 
     def generatePlatforms(self, nb_plt):
+        densityPltBreak = 0
         if len(self.platformGenerated) > 0:
             y_total = self.platformGenerated[-1][0].position[1]
         else:
@@ -40,8 +41,15 @@ class ManagePlatforms:
             x_gen_before = x_gen
             y_gen = y_total - random.randint(70, 100)
             y_total = y_gen
-            #print("append")
-            self.platformGenerated.append([Platform(random.choice([0, 0, 0, 0, 32]), self.screenSize, x_gen, y_gen), None])
+
+            platformType = random.choice([0, 0, 0, 0, 32])
+            if platformType == 32:
+                densityPltBreak += 1
+                if densityPltBreak == 3:
+                    platformType = 0
+            else:
+                densityPltBreak = 0
+            self.platformGenerated.append([Platform(platformType, self.screenSize, x_gen, y_gen), None])
 
 
     def putItem(self, lstItem):
