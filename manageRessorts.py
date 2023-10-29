@@ -8,7 +8,7 @@ class ManageRessorts:
 
     def generateRessorts(self, platformes):
         for i in range(len(platformes)):
-            rng = random.randint(1,17)
+            rng = random.randint(1,10)
             if rng == 1:
                 r = Ressort()
                 r.position[0] = platformes[i][0].position[0] + 48

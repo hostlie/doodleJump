@@ -9,6 +9,7 @@ class Platform:
 
         self.screenSize = screenSize
         self.position = [x, y]
+        self.hitbox = (75, 32)
         self.platformType = platformType
         self.anim = False
         self.fall = False

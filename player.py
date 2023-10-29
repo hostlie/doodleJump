@@ -5,18 +5,28 @@ class Player:
         self.screenSize = screenSize
         self.x = self.screenSize[0] // 2 - 14
         self.y = 300
-        self.speed = 9
+        self.hitbox = (48, 48)
+        self.speed = 7
+        self.leftPress = False
 
     def moves(self):
         if pyxel.btn(pyxel.KEY_LEFT):
             if self.x < (-27):
                 self.x = self.screenSize[0]
             self.x -= self.speed
+            self.leftPress = True
+
         if pyxel.btn(pyxel.KEY_RIGHT):
             if self.x > (self.screenSize[0] - 7):
                 self.x = -21
             self.x += self.speed
+            self.leftPress = False
 
 
     def draw(self):
-        pyxel.rect(self.x, self.y, 28, 28, 10)
+        if self.leftPress:
+            pyxel.blt(self.x, self.y, 1, u=0, v=0, w=48, h=48, colkey=7)
+        else:
+            pyxel.blt(self.x, self.y, 1, u=0, v=0, w=-48, h=48, colkey=7)
+
+        #pyxel.rect(self.x, self.y, 28, 28, 10)
