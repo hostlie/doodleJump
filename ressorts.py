@@ -3,8 +3,8 @@ import pyxel
 class Ressort:
     def __init__(self):
         self.position = [0, 0]
-        self.hitbox = (14, 32)
-        self.jumpHeight = 40
+        self.hitbox = (32, 32)
+        self.jumpHeight = 5
         self.posInLstPlt = None
         self.mustAnim = False
         self.animState = 0

@@ -3,7 +3,8 @@ import pyxel
 class Jetpack:
     def __init__(self):
         self.position = [0, 0]
-        self.jumpHeight = 100
+        self.hitbox = (48, 48)
+        self.jumpHeight = 25
         self.posInLstPlt = None
 
     def draw(self):

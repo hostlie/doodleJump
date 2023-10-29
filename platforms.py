@@ -19,18 +19,20 @@ class Platform:
     def fallPlatform(self, speed=3):
         self.position[2] += speed
 
-    def breakPlatorm(self, i):
+    def breakPlatorm(self):
         # Animation de la platforme se cassant
-        pass
+        pyxel.blt(x=self.position[0], y=self.position[1] + self.vitesse * 8, img=0, u=0, v=32 + self.platformType, w=64,
+                  h=32, colkey=0)
+
+        pyxel.blt(x=self.position[0] + 32 + self.vitesse, y=self.position[1] + self.vitesse * 8, img=0, u=0,
+                  v=64 + self.platformType, w=58, h=32, colkey=0)
+        pyxel.blt(x=self.position[0] + 64 + self.vitesse, y=self.position[1] + self.vitesse * 8, img=0, u=0,
+                  v=32 + self.platformType, w=-16, h=32, colkey=0)
 
 
     def draw(self):
         if self.anim:
-            pyxel.blt(x=self.position[0], y=self.position[1] + self.vitesse * 8, img=0, u=0, v=32 + self.platformType, w=64, h=32, colkey=0)
-
-            pyxel.blt(x=self.position[0] + 32 + self.vitesse, y=self.position[1] + self.vitesse * 8, img=0, u=0, v=64 + self.platformType, w=58, h=32, colkey=0)
-            pyxel.blt(x=self.position[0] + 64 + self.vitesse, y=self.position[1] + self.vitesse * 8, img=0, u=0, v=32 + self.platformType, w=-16, h=32, colkey=0)
-
+            self.breakPlatorm()
         else:
             pyxel.blt(x=self.position[0], y=self.position[1], img=0, u=0, v=self.platformType, w=64, h=32, colkey=0)
             pyxel.blt(x=self.position[0] + 64, y=self.position[1], img=0, u=0, v=self.platformType, w=-16, h=32, colkey=0)

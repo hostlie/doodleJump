@@ -18,25 +18,21 @@ class Game:
         pyxel.run(self.update, self.draw)
 
 
-
-
-
     def update(self):
 
         self.player.moves()
 
         if not self.is_generatedMap:
             self.platforms.generatePlatforms(100)
+            self.jetpacks.generateJetpacks(self.platforms.platformGenerated)
             self.ressorts.generateRessorts(self.platforms.platformGenerated)
             self.platforms.putItem(self.ressorts.ressortsGenerated)
+            self.platforms.putItem(self.jetpacks.jetpacksGenerated)
             #self.jetpacks.generateJetpacks(self.platforms.platformGenerated)
-            #print(self.jetpacks.jetpacksGenerated)
-
-
-
+            print(self.jetpacks.jetpacksGenerated)
+            print(self.ressorts.ressortsGenerated)
             print(self.platforms.platformGenerated)
 
-            print(self.ressorts.ressortsGenerated)
             self.is_generatedMap = True
 
         if pyxel.btnr(pyxel.KEY_SPACE):

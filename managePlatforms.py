@@ -54,11 +54,15 @@ class ManagePlatforms:
 
     def putItem(self, lstItem):
         for pos, item in enumerate(lstItem):
-            if self.platformGenerated[item.posInLstPlt][0].platformType != 32:
+            if self.platformGenerated[item.posInLstPlt][0].platformType != 32 and self.platformGenerated[item.posInLstPlt][1] is None:
+                print("Item PUT !!!")
                 self.platformGenerated[item.posInLstPlt][1] = item
 
-    def collide(self, itemPos, itemHitbx, player):
-        return ((itemPos[0] <= player.x <= itemPos[0] + itemHitbx[0]) or (itemPos[0] <= player.x + player.hitbox[0] <= itemPos[0] + itemHitbx[0])) and itemPos[1] <= player.y + player.hitbox[1] <= itemPos[1] + itemHitbx[1]
+    def collide(self, itemPos, itemHitbx, player, inObject=False):
+        if inObject:
+            return ((itemPos[0] <= player.x <= itemPos[0] + itemHitbx[0]) or (itemPos[0] <= player.x + player.hitbox[0] <= itemPos[0] + itemHitbx[0])) and (itemPos[1] <= (player.y + player.hitbox[1])/2 <= itemPos[1] + itemHitbx[1] or itemPos[1] <= player.y + player.hitbox[1] <= itemPos[1] + itemHitbx[1])
+        else:
+            return ((itemPos[0] <= player.x <= itemPos[0] + itemHitbx[0]) or (itemPos[0] <= player.x + player.hitbox[0] <= itemPos[0] + itemHitbx[0])) and itemPos[1] <= player.y + player.hitbox[1] <= itemPos[1] + itemHitbx[1]
 
 
     def update(self, player):
@@ -77,16 +81,16 @@ class ManagePlatforms:
         if self.down:
             for plt, item in self.platformGenerated:
                 if item:
-                    if self.collide(item.position, item.hitbox, player):
+                    if self.collide(item.position, item.hitbox, player, True):
                         self.down = False
-                        self.vy = self.heightJump + 5
+                        self.vy = self.heightJump + item.jumpHeight
                         item.mustAnim = True
 
                 if self.collide(plt.position, plt.hitbox, player):
                     if plt.platformType == 32:
                         plt.anim = True
                     else:
-                        print("Saut", len(self.platformGenerated))
+                        #print("Saut", len(self.platformGenerated))
                         self.down = False
                         self.vy = self.heightJump
 

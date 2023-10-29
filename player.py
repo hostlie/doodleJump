@@ -5,7 +5,7 @@ class Player:
         self.screenSize = screenSize
         self.x = self.screenSize[0] // 2 - 14
         self.y = 300
-        self.hitbox = (48, 48)
+        self.hitbox = [37, 48]
         self.speed = 7
         self.leftPress = False
 
@@ -28,5 +28,3 @@ class Player:
             pyxel.blt(self.x, self.y, 1, u=0, v=0, w=48, h=48, colkey=7)
         else:
             pyxel.blt(self.x, self.y, 1, u=0, v=0, w=-48, h=48, colkey=7)
-
-        #pyxel.rect(self.x, self.y, 28, 28, 10)
