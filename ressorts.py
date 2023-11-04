@@ -11,6 +11,8 @@ class Ressort:
         self.animFrame = 0
         self.timeAnim = 0
         self.animEnd = False
+        self.active = True
+        self.type = 0
 
     def anim(self):
         self.animFrame = (self.animState % 3) * 32
