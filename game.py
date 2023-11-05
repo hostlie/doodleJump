@@ -13,13 +13,12 @@ class Game:
         self.ressorts = ManageRessorts() # les ressorts
         self.jetpacks = ManageJetpacks() # les jetpacks
         self.player = Player(screenSize) # le player
-
-        pyxel.run(self.update, self.draw)
+        pyxel.mouse(False)
 
 
     def update(self):
 
-        self.player.moves() # methode du déplacement du joueur
+        self.player.update()
 
         if not self.is_generatedMap: # Génération/Regénération de la map
             self.platforms.generatePlatforms(100)  #  creation de 100 platformes de tous types (cassantes/normales)
@@ -36,16 +35,39 @@ class Game:
 
         # NE MARCHE PAS A REVOIR
         if pyxel.btnr(pyxel.KEY_SPACE):  # mise en pause des sauts donc du jeu !!!!PAS LE DEPLACEMENT DU JOUEUR -> A CHANGER
+            while True: pass
             self.platforms.up = False
             self.platforms.down = False
 
         self.platforms.update(self.player) # mise a jour des réaction des platformes vis à vis du player
 
+
         if self.platforms.platformGenerated[0][0].position[1] < 0:  # Fin du jeu si vrai
             pass#print("End")
 
         if len(self.platforms.platformGenerated) < 30:  # regénération des platformes (génération à l'infini)
-            self.is_generatedMap = False
+            self.platforms.generatePlatforms(100)  # creation de 100 platformes de tous types (cassantes/normales)
+            self.jetpacks.generateJetpacks(self.platforms.platformGenerated)  # génération des jetpacks
+            self.ressorts.generateRessorts(self.platforms.platformGenerated)  # génération des resorts
+            self.platforms.putItem(
+                self.ressorts.ressortsGenerated, 30)  # mise en place des ressorts sur les platformes normales
+            self.platforms.putItem(
+                self.jetpacks.jetpacksGenerated, 30)  # mise en place des jetpacks sur les platformes normales
+            # self.jetpacks.generateJetpacks(self.platforms.platformGenerated)
+            print(self.jetpacks.jetpacksGenerated)
+            print(self.ressorts.ressortsGenerated)
+            print(self.platforms.platformGenerated)
+
+        if self.platforms.platformGenerated[0][0].position[1] < -333:
+            return False
+        else:
+            #             high_score = open("highscore.save", "r")
+            #             if high_score < score:
+            #                 high_score.close()
+            #                 high_score.open("highscore.save", "w")
+            #                 high_score.write(score)
+            #             high_score.close()
+            return True
 
 
     def draw(self):

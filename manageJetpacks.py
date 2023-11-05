@@ -40,7 +40,7 @@ class ManageJetpacks:
                     jetpack = item
                     if not self.jetpackFly and jetpack.active:  # si le jetpack ne vole pas et est actif = sur une platforme et touché par le joueur
                         self.jetpackFly = deepcopy(jetpack)  # copie du jetpack
-                    else:
+                    elif not jetpack.active:
                         jetpack.position[0] = plt.position[0] + 28  # mise à jour de la position du jetpacks avec le player
                         jetpack.position[1] = plt.position[1] - 36  # mise à jour de la position du jetpacks avec le player
                         jetpack.draw()  # Affiche le jetpack volant

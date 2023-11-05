@@ -23,6 +23,10 @@ class Player:
             self.leftPress = False
 
 
+    def update(self):
+        self.moves()
+
+
     def draw(self):
         if self.leftPress:
             pyxel.blt(self.x, self.y, 1, u=0, v=0, w=48, h=48, colkey=7)

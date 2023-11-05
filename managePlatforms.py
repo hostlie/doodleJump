@@ -1,5 +1,4 @@
 import pyxel
-import numpy as np
 import random
 from platforms import Platform
 
@@ -31,31 +30,41 @@ class ManagePlatforms:
 
         x_gen_before = -1  # variable pour éviter d'avoir 2 platformes côte-à-côte
         for i in range(nb_plt):
+            platformType = random.choice([0, 0, 0, 0, 32])  # choisi aléatoirement le type de la platforme (0 = normale / 32 = cassante)
             x_gen = random.choice(self.uniformePositions)  # choisi aléatoirement une position x uniforme
-            while x_gen_before == x_gen:  # éviter d'avoir 2 platformes côte-à-côte
+            # éviter d'avoir 2 platformes côte-à-côte et d'avoir une platforme cassante au bout de l'écran (scindé en deux)
+            while x_gen_before == x_gen or (platformType == 32 and x_gen == self.uniformePositions[0] or x_gen == self.uniformePositions[-1]):
                 x_gen = random.choice(self.uniformePositions)  # choisi aléatoirement une position x uniforme
             x_gen_before = x_gen  # mise à jour de la position x de la platforme précédente
             y_gen = y_total - random.randint(70, 100)  # mise à jour de la position y par rapport aux platformes déjà générées
             y_total = y_gen  # variable y_total est mise à jour car la platforme à pris de la hauteur
 
-            platformType = random.choice([0, 0, 0, 0, 32])  # choisi aléatoirement le type de la platforme (0 = normale / 32 = cassante)
             if platformType == 32:
                 densityPltBreak += 1
                 if densityPltBreak == 3:  # il y a une trop forte densité de platformes cassantes le type doit être de 0
                     platformType = 0
             else:
                 densityPltBreak = 0
+
+            if x_gen == self.uniformePositions[0]:
+                self.platformGenerated.append([Platform(platformType, self.uniformePositions[-1], self.screenSize[0] - 40, y_gen), None])  # ajoute la platforme générée à la liste des platformes, le None signifie qu'il n'y a pour l'instant pas d'item sur la platforme
+            elif x_gen == self.uniformePositions[-1]:
+                self.platformGenerated.append([Platform(platformType, -40, self.uniformePositions[0], y_gen), None])  # ajoute la platforme générée à la liste des platformes, le None signifie qu'il n'y a pour l'instant pas d'item sur la platforme
+
             self.platformGenerated.append([Platform(platformType, self.screenSize, x_gen, y_gen), None])  # ajoute la platforme générée à la liste des platformes, le None signifie qu'il n'y a pour l'instant pas d'item sur la platforme
 
 
-    def putItem(self, lstItem):
+    def putItem(self, lstItem, numPass=0):
         '''
         :param lstItem: liste des items (ressorts ou jetpacks)
+        :param numPass: nombre de platformes en début de liste qui seront ignorées par l'import d'un item (pour la regénération)
         '''
         for pos, item in enumerate(lstItem):
-            # vérifie que la platforme ne soit pas cassante et que la platforme n'a pas d'item sur elle (pour ne pas écraser l'item déjà présent)
-            if self.platformGenerated[item.posInLstPlt][0].platformType != 32 and self.platformGenerated[item.posInLstPlt][1] is None:
-                self.platformGenerated[item.posInLstPlt][1] = item  # met l'item à la place du None dans les platformes générées
+            if pos + 1 > numPass:
+                # vérifie que la platforme ne soit pas cassante et que la platforme n'a pas d'item sur elle (pour ne pas écraser l'item déjà présent)
+                # et vérifie que la platforme ne soit pas au bout de l'écran (platforme scindé en deux)
+                if self.platformGenerated[item.posInLstPlt][0].platformType != 32 and self.platformGenerated[item.posInLstPlt][1] is None and self.platformGenerated[item.posInLstPlt][0].position[0] != self.screenSize[0] - 40 and self.platformGenerated[item.posInLstPlt][0].position[0] != -40:
+                    self.platformGenerated[item.posInLstPlt][1] = item  # met l'item à la place du None dans les platformes générées
 
     def collide(self, itemPos, itemHitbx, player, inObject=False):
         '''
@@ -76,7 +85,6 @@ class ManagePlatforms:
         :param player: variable de la class player
         '''
         self.vy -= self.ay  # met à jour la vitesse y
-        #print(self.vy)
         for plt, item in self.platformGenerated:
             plt.position[1] += self.vy  # met à jour la position y de chaque platforme
 
@@ -112,5 +120,4 @@ class ManagePlatforms:
         for plt, item in self.platformGenerated:
             if plt.anim:  # si la platforme s'anime -> cassante et a été touchée par le player
                 plt.vitesse += 1  # augmentation de la vitesse de chute de la platforme -> simulation de gravité
-
             plt.draw()  # affiche la platforme
